@@ -6,6 +6,8 @@ import json
 
 """
 	Scraped darkstation.com critic reviews with infinite scroll page.
+	Every scroll made, we will check the current scroll height to the previous height.
+	Process will stop if height become equal after scrolling.
 """
 
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:49.0) Gecko/20100101 Firefox/49.0'
@@ -18,7 +20,6 @@ url = 'https://www.darkstation.com/reviews'
 driver = webdriver.Chrome(path, chrome_options=options)
 driver.get(url)
 time.sleep(10)
-offset_height = driver.execute_script("return document.body.offsetHeight;")
 
 scroll_height = 1200
 links = []
@@ -43,7 +44,7 @@ while True:
 	except KeyboardInterrupt:
 		driver.quit()
 
-
+#saved scraped links and we will use scrapy because it more faster that the selenium
 with open('dark_station_links.json', 'w+') as link:
 	json.dump(links, link, indent=4)
 
